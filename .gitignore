@@ -1,0 +1,14 @@
+# project needed
+# *.jar
+
+# Java class files
+*.class
+
+# generated files
+.metadata/
+.recommenders/
+RemoteSystemsTempFiles/
+Servers/
+
+# maven generated
+target/
