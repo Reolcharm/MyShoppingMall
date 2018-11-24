@@ -75,7 +75,25 @@
 		<groupId>javax.servlet</groupId>
 		<artifactId>servlet-api</artifactId>	
 		<scope>provided</scope>
-	</dependency>  
+	</dependency> 
+	<!-- Mybatis -->
+	<dependency>
+	<groupId>org.mybatis</groupId>
+	<artifactId>mybatis</artifactId>
+	</dependency>
+	<dependency>
+	<groupId>org.mybatis</groupId>
+	<artifactId>mybatis-spring</artifactId>
+	</dependency>
+	<dependency>
+	<groupId>com.github.miemiedev</groupId>
+	<artifactId>mybatis-paginator</artifactId>
+	</dependency>
+	
+	<dependency>
+			<groupId>com.github.pagehelper</groupId>
+			<artifactId>pagehelper</artifactId>
+	</dependency> 
   	<dependency>
   		<groupId>com.pinyougou</groupId>
   		<artifactId>pinyougou-common</artifactId>

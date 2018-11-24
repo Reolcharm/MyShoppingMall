@@ -11,19 +11,6 @@
   <dependencies>
 	<!-- Mybatis -->
 	<dependency>
-		<groupId>org.mybatis</groupId>
-		<artifactId>mybatis</artifactId>
-	</dependency>
-	<dependency>
-		<groupId>org.mybatis</groupId>
-		<artifactId>mybatis-spring</artifactId>
-	</dependency>
-	<dependency>
-		<groupId>com.github.miemiedev</groupId>
-		<artifactId>mybatis-paginator</artifactId>
-	</dependency>
-	<!-- Mybatis -->
-	<dependency>
 	<groupId>org.mybatis</groupId>
 	<artifactId>mybatis</artifactId>
 	</dependency>
@@ -52,11 +39,10 @@
 		<version>0.0.1-SNAPSHOT</version>
 	</dependency>
 
-	<dependency>
+	 <dependency>
 		<groupId>com.github.pagehelper</groupId>
 		<artifactId>pagehelper</artifactId>
-		<version>5.0.0</version>
-	</dependency>
+	</dependency> 
   </dependencies>
   
 </project>

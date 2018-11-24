@@ -2,44 +2,44 @@ package com.pinyougou.pojo;
 
 import java.io.Serializable;
 
-public class TbAreas implements Serializable{
-    private Integer id;
+public class TbAreas implements Serializable {
+	private Integer id;
 
-    private String areaid;
+	private String areaid;
 
-    private String area;
+	private String area;
 
-    private String cityid;
+	private String cityid;
 
-    public Integer getId() {
-        return id;
-    }
+	public Integer getId() {
+		return id;
+	}
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+	public void setId(Integer id) {
+		this.id = id;
+	}
 
-    public String getAreaid() {
-        return areaid;
-    }
+	public String getAreaid() {
+		return areaid;
+	}
 
-    public void setAreaid(String areaid) {
-        this.areaid = areaid == null ? null : areaid.trim();
-    }
+	public void setAreaid(String areaid) {
+		this.areaid = areaid == null ? null : areaid.trim();
+	}
 
-    public String getArea() {
-        return area;
-    }
+	public String getArea() {
+		return area;
+	}
 
-    public void setArea(String area) {
-        this.area = area == null ? null : area.trim();
-    }
+	public void setArea(String area) {
+		this.area = area == null ? null : area.trim();
+	}
 
-    public String getCityid() {
-        return cityid;
-    }
+	public String getCityid() {
+		return cityid;
+	}
 
-    public void setCityid(String cityid) {
-        this.cityid = cityid == null ? null : cityid.trim();
-    }
+	public void setCityid(String cityid) {
+		this.cityid = cityid == null ? null : cityid.trim();
+	}
 }
