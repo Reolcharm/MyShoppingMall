@@ -7,7 +7,6 @@ import java.util.List;
  * @author Reolcharm
  *
  */
-@SuppressWarnings("serial")
 public class PageResult implements Serializable {
 	/**
 	 * 总记录数
