@@ -26,104 +26,98 @@
 <script type="text/javascript">
 	/* 初始化app,并加载 分页模块 */
 	var app = angular.module("pinyougou", [ 'pagination' ]);
-	/* 初始化控制器  */
-	app.controller("brandController", function($scope, $http) {
-
-		/* 
-		显示所有品牌
-		$scope.findAll = function() {
-				
-			$http.get("../brand/findPage.do").success(
-				function(data) {
-					$scope.brandInfos = data;
-				}
-			)
-		} */
-
-		/* 分页组件配置 */
-		$scope.paginationConf = {
-			currentPage : 1,
-			totalItems : 10,
-			itemsPerPage : 10,
-			perPageOptions : [ 10, 20, 30, 40, 50 ],
-			onChange : function() {
-				$scope.reloadList();//重新加载
-			}
+	
+	/* 自定义品牌服务层 */
+	app.service('brandService', function($http){
+		
+		/* 显示所有品牌, 已过时 */
+		this.findAll = function() {	
+			return $http.get("../brand/findPage.do"); 
 		}
 
-		/* 重新加载功能, 已过时. */
-		/* $scope.reloadList = function() {
-			//切换页码  
-			$scope.findPage($scope.paginationConf.currentPage,
-					$scope.paginationConf.itemsPerPage);
-		} */
+		/* page 當前頁  rows 每頁顯示條數; 分页显示所有品牌功能 */
+		this.findPage = function(page, rows) {
+			return $http.get('../brand/findPage.do?page=' + page + '&rows=' + rows);
+		}
+		
+		/* 分页方法的重载. 混合提交 */
+		this.search = function(page, rows, searchEntity) {
+			return $http.post('../brand/findByExample.do?page=' + page + '&rows=' + rows, searchEntity);
+		}
+		
+		/* 数据回显功能 */
+		this.findOne = function(id) {
+			/* 发送 get请求,进行数据回显 */
+			return $http.get('../brand/findOne.do?id=' + id);
+		}
+		
+		/* 新增功能 */
+		this.add = function(entity) {
+			return $http.post('../brand/add.do', entity);
+		}
+		
+		/* 修改后, 保存功能 */
+		 this.update = function(entity) {
+			return $http.post('../brand/update.do', entity);
+		}
+		
+		/* 删除功能  */
+		this.dele = function(selectIds) {
+			return $http.get("../brand/delete.do?ids=" + selectIds);
+		}	
+	});
+	
+	/* ---------------初始化控制器, 分层后, 注入自定义服务: brandService-------------------- */
+	app.controller("brandController", function($scope, $http, brandService) {
 
-		/* 
-		 * page 當前頁
-		 * rows 每頁顯示條數
-		分页显示所有品牌功能
-		 */
+		/* page 當前頁  rows 每頁顯示條數   分页显示所有品牌功能 */ 
 		$scope.findPage = function(page, rows) {
-			$http.get('../brand/findPage.do?page=' + page + '&rows=' + rows)
-					.success(function(data) {
-						/* 向视图层赋值 */
-						$scope.lists = data.rows;
-						//更新总记录数
-						$scope.paginationConf.totalItems = data.total;
-					});
+			brandService.findPage(page, rows).success(
+				function(data) {
+					/* 向视图层赋值 */
+					$scope.lists = data.rows;
+					//更新总记录数
+					$scope.paginationConf.totalItems = data.total;
+				});
 		}
-
-		/* 新增品牌功能,过时 */
-		/* $scope.save=function(){
-			$http.post('../brand/add.do', $scope.entity).success(
-				function(data){
-					新增成功 
-					if(data.success){
-						重新刷新 
-						$scope.reloadList();
-					} else {
-						alert(data.message);
-					}
-				}
-			);
-		} */
-
+		
 		/* 数据回显功能 */
 		$scope.findOne = function(id) {
 			/* 发送 get请求,进行数据回显 */
-			$http.get('../brand/findOne.do?id=' + id).success(
-			/* data: tbBrand */
-			function(data) {
-				/* 数据回显 */
-				$scope.entity = data;
-			});
+			brandService.findOne(id).success(
+				/* data: tbBrand */
+				function(data) {
+					/* 数据回显 */
+					$scope.entity = data;
+				});
 		}
 
 		/* 修改后, 保存功能
 		 * 修改原 save() 进行方法的分发: 
 		 *
 		 * 新增品牌功能 */
-		$scope.save = function(id) {
+		$scope.save = function() {
 			/* 进行方法的分发 */
-			var methodName = 'add';
+			var object = null;
 			/* 双向绑定的魅力, 利用`修改`按钮的findOne()对 entity.id 赋值 */
 			if ($scope.entity.id != null) {
-				methodName = 'update';
+				object = brandService.update($scope.entity);
+			} else {
+				object = brandService.add($scope.entity);
 			}
-			$http.post('../brand/' + methodName + '.do', $scope.entity)
-					.success(function(data) {
-						/* 新增成功 */
-						if (data.success) {
-							/* 重新刷新 */
-							$scope.reloadList();
-						} else {
-							alert(data.message);
-						}
-					});
+			object.success(
+				function(data) {
+					/* 新增成功 */
+					if (data.success) {
+						/* 重新刷新 */
+						$scope.reloadList();
+					} else {
+						alert(data.message);
+					}
+				});
 		}
 
 		/* --------------------批量删除功能开始---------------------- */
-
 		$scope.selectIds = [];//选中的ID数组
 		/* 更新 id 数组 */
 		$scope.updateSelection = function($event, id) {
@@ -136,9 +130,9 @@
 				$scope.selectIds.splice(idx, 1);
 			}
 		}
-
+		
 		$scope.dele = function() {
-			$http.get("../brand/delete.do?ids="+$scope.selectIds).success(
+			brandService.dele($scope.selectIds).success(
 				function(data){
 					/* 新增成功 */
 					if (data.success) {
@@ -153,24 +147,52 @@
 		
 		/* --------------------条件查询功能开始---------------------- */
 		//定义搜索对象 
-		 $scope.searchEntity={};
+		$scope.searchEntity={};
+		
 		/* 分页方法的重载. 混合提交 */
 		$scope.search = function(page, rows) {
-			$http.post('../brand/findByExample.do?page=' + page + '&rows=' + rows, $scope.searchEntity)
-				.success(function(data){
-					/* 向视图层列表赋值 */
-					$scope.lists= data.rows;
-					//更新总记录数
-					$scope.paginationConf.totalItems = data.total;		
-				});
-		}
-		//刷新列表 
-		$scope.reloadList=function(){
-			/* 由findPage()方法, 变成search() 方法 */
-			  $scope.search($scope.paginationConf.currentPage, $scope.paginationConf.itemsPerPage);				
+			brandService.search(page, rows, $scope.searchEntity).success(function(data){
+				/* 向视图层列表赋值 */
+				$scope.lists= data.rows;
+				//更新总记录数
+				$scope.paginationConf.totalItems = data.total;		
+			});
 		}
 		
-		/* --------------------条件查询功能结束---------------------- */
+		/* 刷新列表功能  */
+		$scope.reloadList=function(){
+			/* 由findPage()方法, 变成search() 方法 .调用 controller 层的方法. */
+			$scope.search($scope.paginationConf.currentPage, $scope.paginationConf.itemsPerPage);				
+		}
+		
+		/* 分页组件配置 */
+		$scope.paginationConf = {
+			currentPage : 1,
+			totalItems : 10,
+			itemsPerPage : 10,
+			perPageOptions : [ 10, 20, 30, 40, 50 ],
+			onChange : function() {
+				$scope.reloadList();//重新加载
+			}
+		}
+		
+		/* 
+		显示所有品牌, 已过时
+		$scope.findAll = function() {
+			$http.get("../brand/findPage.do").success(
+				function(data) {
+					$scope.brandInfos = data;
+				}
+			)
+		} */
+
+		/* 重新加载功能, 已过时. */
+		/* $scope.reloadList = function() {
+			//切换页码  
+			$scope.findPage($scope.paginationConf.currentPage,
+					$scope.paginationConf.itemsPerPage);
+		} */
+	
 	});
 </script>
 </head>
@@ -207,8 +229,9 @@
 			</div>
 			<div class="box-tools pull-right">
 				<div class="has-feedback">
-				品牌名称: <input ng-model="searchEntity.name"/> 品牌首字母:<input ng-model="searchEntity.firstChar"/>
-				<button class="btn btn-default" ng-click="reloadList()">查询</button>
+					品牌名称: <input ng-model="searchEntity.name" /> 品牌首字母:<input
+						ng-model="searchEntity.firstChar" />
+					<button class="btn btn-default" ng-click="reloadList()">查询</button>
 				</div>
 			</div>
 			<!--工具栏/-->
