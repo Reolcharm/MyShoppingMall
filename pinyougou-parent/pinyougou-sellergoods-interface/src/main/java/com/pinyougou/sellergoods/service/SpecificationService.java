@@ -1,5 +1,7 @@
 package com.pinyougou.sellergoods.service;
 import java.util.List;
+import java.util.Map;
+
 import com.pinyougou.pojo.TbSpecification;
 import com.pinyougou.pojogroup.Specification;
 
@@ -59,5 +61,12 @@ public interface SpecificationService {
 	 * @return
 	 */
 	public PageResult findPage(TbSpecification specification, int pageNum,int pageSize);
+	
+	/**
+	 * [{id:32,text:"机身内存"},{..}] 
+	 * @return
+	 * 
+	 */
+	List<Map> selectOptionList();
 	
 }

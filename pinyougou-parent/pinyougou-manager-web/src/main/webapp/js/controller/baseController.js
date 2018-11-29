@@ -1,13 +1,13 @@
 /* ---------------初始化控制器, 分层后, 注入自定义服务: brandService-------------------- */
 app.controller('baseController', function($scope) {
-	
+
 	/* 刷新列表功能 */
 	$scope.reloadList = function() {
 		/* 由findPage()方法, 变成search() 方法 .调用 controller 层的方法. */
 		$scope.search($scope.paginationConf.currentPage,
 				$scope.paginationConf.itemsPerPage);
 	}
-	
+
 	/* 更新 id 数组 */
 	// 选中的ID数组
 	$scope.selectIds = [];
@@ -21,7 +21,7 @@ app.controller('baseController', function($scope) {
 			$scope.selectIds.splice(idx, 1);
 		}
 	}
-	
+
 	/* 分页组件配置 */
 	$scope.paginationConf = {
 		currentPage : 1,
@@ -32,5 +32,16 @@ app.controller('baseController', function($scope) {
 			$scope.reloadList();// 重新加载
 		}
 	}
-
+	// 提取 json 字符串数据中某个属性，返回拼接字符串 逗号分隔
+	$scope.jsonToString = function(jsonString, key) {
+		var json = JSON.parse(jsonString);// 将 json 字符串转换为 json 对象,集合
+		var value = "";
+		for (var i = 0; i < json.length; i++) {
+			if (i > 0) {
+				value += ","
+			}
+			value += json[i][key];
+		}
+		return value;
+	}
 });

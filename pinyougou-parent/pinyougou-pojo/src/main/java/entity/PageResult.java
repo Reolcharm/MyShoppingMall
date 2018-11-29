@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
+ * 查询分页的结果集. json格式: {total:10,rows:[{},{}]}
+ * 
  * @author Reolcharm
  *
  */
@@ -39,7 +41,5 @@ public class PageResult implements Serializable {
 	public void setRows(List rows) {
 		this.rows = rows;
 	}
-
-	
 
 }

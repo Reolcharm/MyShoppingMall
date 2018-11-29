@@ -1,6 +1,7 @@
 package com.pinyougou.manager.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -101,6 +102,7 @@ public class BrandController {
 
 	/**
 	 * 批量删除功能
+	 * 
 	 * @param ids
 	 * @return
 	 */
@@ -122,6 +124,7 @@ public class BrandController {
 
 	/**
 	 * 方法重载, 条件查询, 分页展示
+	 * 
 	 * @param tbBrand
 	 * @param page
 	 * @param rows
@@ -130,5 +133,10 @@ public class BrandController {
 	@RequestMapping("/findByExample")
 	public PageResult findPage(@RequestBody TbBrand tbBrand, Integer page, Integer rows) {
 		return brandService.findPage(tbBrand, page, rows);
+	}
+
+	@RequestMapping("/selectOptionList")
+	public List<Map> selectOptionList() {
+		return brandService.selectOptionList();
 	}
 }

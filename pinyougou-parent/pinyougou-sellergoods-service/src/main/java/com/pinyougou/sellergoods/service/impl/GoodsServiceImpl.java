@@ -5,10 +5,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.pinyougou.mapper.TbGoodsDescMapper;
 import com.pinyougou.mapper.TbGoodsMapper;
 import com.pinyougou.pojo.TbGoods;
+import com.pinyougou.pojo.TbGoodsDescExample;
 import com.pinyougou.pojo.TbGoodsExample;
 import com.pinyougou.pojo.TbGoodsExample.Criteria;
+import com.pinyougou.pojogroup.Goods;
 import com.pinyougou.sellergoods.service.GoodsService;
 
 import entity.PageResult;
@@ -24,6 +27,8 @@ public class GoodsServiceImpl implements GoodsService {
 
 	@Autowired
 	private TbGoodsMapper goodsMapper;
+	@Autowired
+	private TbGoodsDescMapper goodsDescMapper;
 
 	/**
 	 * 查询全部
@@ -117,6 +122,24 @@ public class GoodsServiceImpl implements GoodsService {
 
 		Page<TbGoods> page = (Page<TbGoods>) goodsMapper.selectByExample(example);
 		return new PageResult(page.getTotal(), page.getResult());
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.pinyougou.sellergoods.service.GoodsService#add(com.pinyougou.pojogroup.
+	 * Goods)
+	 */
+	@Override
+	public void add(Goods goods) {
+		// 根据 保存的商品信息而生成的 商品 id, 保存拓展信息.
+		if (goods != null) {
+			goods.getGoods().setAuditStatus("0");//设置未申请状态
+			goodsMapper.insert(goods.getGoods());
+			goods.getGoodsDesc().setGoodsId(goods.getGoods().getId());//设置 ID
+			goodsDescMapper.insert(goods.getGoodsDesc());// 插入商品扩展数据
+		}
 	}
 
 }
