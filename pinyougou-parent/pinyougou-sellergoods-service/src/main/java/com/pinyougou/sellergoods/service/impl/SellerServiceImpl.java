@@ -2,7 +2,10 @@ package com.pinyougou.sellergoods.service.impl;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.support.SecurityContextProvider;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -177,5 +180,6 @@ public class SellerServiceImpl implements SellerService {
 		seller.setStatus(status);	
 		sellerMapper.updateByPrimaryKey(seller);
 	}
+
 
 }
