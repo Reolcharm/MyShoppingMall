@@ -1,5 +1,7 @@
 package com.pinyougou.sellergoods.service;
 import java.util.List;
+import java.util.Map;
+
 import com.pinyougou.pojo.TbSeller;
 
 import entity.PageResult;
@@ -57,5 +59,12 @@ public interface SellerService {
 	 * @return
 	 */
 	public PageResult findPage(TbSeller seller, int pageNum,int pageSize);
+	
+	/**
+	 * 更新状态.
+	 * @param status 状态值：  0：未审核   1：已审核   2：审核未通过   3：关闭
+	 * @param sellerId 用户名, 如: nico, huawei, ..
+	 */
+	void updateStatus(String status, String sellerId);
 	
 }

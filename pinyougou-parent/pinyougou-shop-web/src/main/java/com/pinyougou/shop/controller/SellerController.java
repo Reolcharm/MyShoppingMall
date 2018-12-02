@@ -1,10 +1,12 @@
-package com.pinyougou.manager.controller;
+package com.pinyougou.shop.controller;
 
 import java.util.List;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.pinyougou.pojo.TbSeller;
 import com.pinyougou.sellergoods.service.SellerService;
@@ -46,13 +48,17 @@ public class SellerController {
 	}
 
 	/**
-	 * 增加
+	 * 商家入驻功能
 	 * 
 	 * @param seller
 	 * @return
 	 */
 	@RequestMapping("/add")
 	public Result add(@RequestBody TbSeller seller) {
+		// 密码加密
+		BCryptPasswordEncoder passEncoding = new BCryptPasswordEncoder();
+		String password = passEncoding.encode(seller.getPassword());
+		seller.setPassword(password);
 		try {
 			sellerService.add(seller);
 			return new Result(true, "增加成功");
@@ -108,7 +114,7 @@ public class SellerController {
 	}
 
 	/**
-	 * 查询+分页
+	 * 条件查询+分页
 	 * 
 	 * @param brand
 	 * @param page
@@ -118,18 +124,6 @@ public class SellerController {
 	@RequestMapping("/search")
 	public PageResult search(@RequestBody TbSeller seller, int page, int rows) {
 		return sellerService.findPage(seller, page, rows);
-	}
-
-	@RequestMapping("/updateStatus")
-	public Result updateStatus(String status, String sellerId) {
-		try {
-			sellerService.updateStatus(status, sellerId);
-			return new Result(true, "成功");
-		} catch (Exception e) {
-			e.printStackTrace();
-			return new Result(false, "失败");
-		}
-
 	}
 
 }
