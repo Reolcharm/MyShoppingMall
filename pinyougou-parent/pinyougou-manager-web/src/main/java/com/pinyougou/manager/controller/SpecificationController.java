@@ -123,6 +123,10 @@ public class SpecificationController {
 	}
 
 	
+	/**
+	 * @return
+	 * 支持规格下拉列表
+	 */
 	@RequestMapping("/selectOptionList")
 	public List<Map> selectOptionList() {
 		return specificationService.selectOptionList();

@@ -11,7 +11,7 @@ target/
 # eclipse ignore
 .settings/
 .project
-.classpath
+*.classpath
 
 # idea ignore
 .idea/

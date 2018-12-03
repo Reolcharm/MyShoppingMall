@@ -7,6 +7,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * @author Reolcharm
+ * 获取登陆名称.
+ */
 @RestController
 @RequestMapping("/login")
 public class LoginController {

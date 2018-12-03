@@ -4,6 +4,8 @@ import java.io.Serializable;
 
 /**
  * @author Reolcharm 封装结果集, 新增成功与否
+ * 
+ *         Boolean success; String message;
  */
 public class Result implements Serializable {
 	private Boolean success;

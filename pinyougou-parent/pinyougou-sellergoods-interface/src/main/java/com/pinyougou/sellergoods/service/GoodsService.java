@@ -58,6 +58,7 @@ public interface GoodsService {
 	 * @return
 	 */
 	public PageResult findPage(TbGoods goods, int pageNum,int pageSize);
+	
 	/**
 	* 增加, 接受页面传递而来的数据.两表联合增加
 	*/

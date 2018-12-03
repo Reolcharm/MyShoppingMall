@@ -33,7 +33,7 @@
 	
 </script>
 
-<!-- 必须在app之后 -->
+<!-- angular-select2 必须在app之后 -->
 <script type="text/javascript" src="../js/angular-select2.js">
 	
 </script>
@@ -182,9 +182,10 @@
 						<!-- 
 							multiple 表示可多选
 							Config 用于配置数据来源
-							select2-model 用于指定用户选择后提交的变量, 以便进行后续操作. 
-							<td>{{entity.brandIds}}</td>: 类型模板(tb_type_template)表中`关联品牌`字段, 选择后提交品牌 
-								规格同理.
+							select2-model 用于指定用户选择后提交的变量, 以便进行后续整个页面的保存操作等. 
+							<td>{{entity.brandIds}}</td>: 类型模板(tb_type_template)表中`关联品牌`字段, 
+							选择后提交品牌. 规格同理.
+								
 						-->
 						<tr>
 							<td>扩展属性</td>

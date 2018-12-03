@@ -50,13 +50,16 @@
 	<!-- 引用dubbo 服务 指定名称, 连接注册中心. -->
 	<dubbo:application name="pinyougou-shop-web" />
 	<dubbo:registry address="zookeeper://192.168.25.129:2181" ></dubbo:registry>
+	
 	<!-- 注册了的 SellerService 服务层接口 -->
 	<dubbo:reference id="sellerService"
 		interface="com.pinyougou.sellergoods.service.SellerService"></dubbo:reference>
+	
 	<!-- 注入 有set 方法 sellerService, 指向服务层的接口 -->
 	<beans:bean id="userDetailService" class="com.pinyougou.service.UserDetailServiceImpl">
 		<beans:property name="sellerService" ref="sellerService"></beans:property>
 	</beans:bean>
+	
 	<!-- 注册时, 加密 Bean -->
 	<beans:bean id="passwordEncoding"
 		class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"></beans:bean>

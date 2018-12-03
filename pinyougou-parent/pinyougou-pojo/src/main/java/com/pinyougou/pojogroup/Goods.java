@@ -8,9 +8,6 @@ import com.pinyougou.pojo.TbGoodsDesc;
 import com.pinyougou.pojo.TbItem;
 
 public class Goods implements Serializable {
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private TbGoods goods;// 商品 SPU
 	private TbGoodsDesc goodsDesc;// 商品扩展

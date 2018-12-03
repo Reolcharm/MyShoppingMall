@@ -1,4 +1,3 @@
-//服务层
 app.service('typeTemplateService',function($http){
 	    	
 	//读取列表数据绑定到表单中
@@ -29,5 +28,10 @@ app.service('typeTemplateService',function($http){
 	this.search=function(page,rows,searchEntity){
 		return $http.post('../typeTemplate/search.do?page='+page+"&rows="+rows, searchEntity);
 	}    
+	
+	//下拉列表数据
+	this.selectOptionList=function(){
+		return $http.get("../typeTemplate/selectOptionList.do");
+	}
 	
 });
