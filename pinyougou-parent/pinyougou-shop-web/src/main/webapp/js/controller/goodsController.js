@@ -68,7 +68,8 @@ app.controller('goodsController', function($scope, $controller, goodsService,
 				});
 	}
 
-	// 上传文件: $scope.image_entity = [{color:'', url:''},{},{}....]
+	// 上传文件: $scope.image_entity = [{color:'',
+	// url:''},{},{}....]
 	$scope.uploadFile = function() {
 		uploadService.uploadFile().success(function(response) {
 			// 整个图片 封装成 image_entity
@@ -81,11 +82,12 @@ app.controller('goodsController', function($scope, $controller, goodsService,
 
 		});
 	}
-	// 定义页面实体结构 , goods 可省略
+	// 定义页面实体结构 , goods 可省略,
 	$scope.entity = {
 		goods : {},
 		goodsDesc : {
-			itemImages : []
+			itemImages : [],
+			specificationItems : []
 		}
 	};
 	// 点击后向图片列表 添加行: 将图片实体(一个集合类型) 添加到页面实体: $scope.entity 中
@@ -129,16 +131,88 @@ app.controller('goodsController', function($scope, $controller, goodsService,
 				function(response) {
 					// 获取类型模板 实体
 					$scope.typeTemplate = response;
+
 					// 解析品牌列表
 					$scope.typeTemplate.brandIds = JSON
 							.parse($scope.typeTemplate.brandIds);
+
 					// 在用户更新模板ID时，读取模板中的扩展属性赋给商品的扩展属性。
-					// 解析扩展属性 --> 将字符串格式转换成页面能解析的 json 格式.
+					// 解析扩展属性 -->
+					// 将字符串格式转换成页面能解析的
+					// json 格式.
 					$scope.entity.goodsDesc.customAttributeItems = JSON
 							.parse($scope.typeTemplate.customAttributeItems);
-//					由于我们的模板中只记录了规格名称,而我们除了显示规格名称还要显示规格下的规格选项
-					
+				});
+
+		// 由于我们的模板中只记录了规格名称,而我们除了显示规格名称还要显示规格下对应的的规格选项
+		typeTemplateService.selectSpecList(newValue).success(
+				function(response) {
+					$scope.specList = response;
 				});
 	});
+	/**
+	 * 随页面勾选生成 json 串 $scope.entity = { goods : {}, goodsDesc : { itemImages:[],
+	 * specificationItems : [{ "attributeName": "网络制式", "attributeValue": [
+	 * "移动3G", "移动4G" ] }, ...] } };
+	 */
+	$scope.updateSpecAttribute = function($event, name, value) {
 
+		var object = $scope.searchObjectByKey(
+				$scope.entity.goodsDesc.specificationItems, "attributeName",
+				name);
+
+		if (object != null) {
+			// 1. list 集合中存在key 为"attributeName" 的对象.
+			if ($event.target.checked) {
+				object.attributeValue.push(value);
+			} else {
+				// 1.3 从 attributeValue 中移除 value
+				object.attributeValue.splice(object.attributeValue
+						.indexOf(value), 1);
+
+				if (object.attributeValue.length == 0) {
+					// 1.4 移除整个 object = { "attributeName":
+					// "网络制式","attributeValue": [] }
+					$scope.entity.goodsDesc.specificationItems.splice(
+							$scope.entity.goodsDesc.specificationItems
+									.indexOf(object), 1);
+				}
+			}
+		} else {
+			// 2. 没有这个 attributeName
+			$scope.entity.goodsDesc.specificationItems.push({
+				"attributeName" : name,
+				"attributeValue" : [ value ]
+			});
+		}
+	}
+
+	// 创建SKU列表
+	$scope.createItemList = function() {
+		$scope.entity.itemList = [ {
+			spec : {},
+			price : 0,
+			num : 99999,
+			status : '0',
+			isDefault : '0'
+		} ];// 初始化
+		var items = $scope.entity.goodsDesc.specificationItems;
+		for (var i = 0; i < items.length; i++) {
+			$scope.entity.itemList = addColumn($scope.entity.itemList,
+					items[i].attributeName, items[i].attributeValue);
+		}
+	}
+	// 添加列值
+	addColumn = function(list, columnName, conlumnValues) {
+		var newList = [];// 新的集合
+		for (var i = 0; i < list.length; i++) {
+			var oldRow = list[i];
+			for (var j = 0; j < conlumnValues.length; j++) {
+				var newRow = JSON.parse(JSON.stringify(oldRow));// 深克隆
+				newRow.spec[columnName] = conlumnValues[j];
+				newList.push(newRow);
+			}
+		}
+		return newList;
+	}
 });

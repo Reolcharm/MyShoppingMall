@@ -1,5 +1,15 @@
 /* ---------------初始化控制器, 分层后, 注入自定义服务: brandService-------------------- */
 app.controller('baseController', function($scope) {
+	/* 分页组件配置 */
+	$scope.paginationConf = {
+		currentPage : 1,
+		totalItems : 10,
+		itemsPerPage : 10,
+		perPageOptions : [ 10, 20, 30, 40, 50 ],
+		onChange : function() {
+			$scope.reloadList();// 重新加载
+		}
+	}
 
 	/* 刷新列表功能 */
 	$scope.reloadList = function() {
@@ -22,16 +32,6 @@ app.controller('baseController', function($scope) {
 		}
 	}
 
-	/* 分页组件配置 */
-	$scope.paginationConf = {
-		currentPage : 1,
-		totalItems : 10,
-		itemsPerPage : 10,
-		perPageOptions : [ 10, 20, 30, 40, 50 ],
-		onChange : function() {
-			$scope.reloadList();// 重新加载
-		}
-	}
 	// 提取 json 字符串数据中某个属性，返回拼接字符串 逗号分隔
 	$scope.jsonToString = function(jsonString, key) {
 		var json = JSON.parse(jsonString);// 将 json 字符串转换为 json 对象,集合
@@ -44,6 +44,14 @@ app.controller('baseController', function($scope) {
 		}
 		return value;
 	}
-	
-	
+
+	// 判断集合json 中某个key的值是否为keyValue, 是, 返回该对象.
+	$scope.searchObjectByKey = function(list, key, keyValue) {
+		for (var i = 0; i < list.length; i++) {
+			if (list[i][key] == keyValue) {// “attributeName”:”规格名称”
+				return list[i]; // 第一种情况: 规格名称存在
+			}
+		}
+		return null; // 第二种情况: 规格名称不存在
+	}
 });
