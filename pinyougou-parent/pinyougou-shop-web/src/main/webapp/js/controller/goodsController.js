@@ -1,6 +1,6 @@
 //控制层 
 app.controller('goodsController', function($scope, $controller, goodsService,
-		uploadService) {
+		uploadService, itemCatService, typeTemplateService) {
 
 	$controller('baseController', {
 		$scope : $scope
@@ -90,13 +90,55 @@ app.controller('goodsController', function($scope, $controller, goodsService,
 	};
 	// 点击后向图片列表 添加行: 将图片实体(一个集合类型) 添加到页面实体: $scope.entity 中
 	$scope.add_image_entity = function() {
-
 		$scope.entity.goodsDesc.itemImages.push($scope.image_entity);
 	}
 
 	$scope.del_image_entity = function(index) {
-
 		$scope.entity.goodsDesc.itemImages.splice(index, 1);
 	}
+
+	// 一级下拉列表
+	$scope.selectItemCat1List = function() {
+		itemCatService.findByParentId(0).success(function(response) {
+			$scope.ItemCat1List = response;
+		});
+	}
+	// 二级下拉列表
+	$scope.$watch('entity.goods.category1Id', function(newValue, oldValue) {
+		itemCatService.findByParentId(newValue).success(function(response) {
+			$scope.ItemCat2List = response;
+		});
+	});
+	// 三级下拉列表
+	// $watch方法用于监控某个变量的值，当被监控的值发生变化，就自动执行相应的函数。
+	// newValue: category1Id 变化后的值.--> 下拉框点击选择后的值
+	$scope.$watch('entity.goods.category2Id', function(newValue, oldValue) {
+		itemCatService.findByParentId(newValue).success(function(response) {
+			$scope.ItemCat3List = response;
+		});
+	});
+	// 模板 id, 三级分类选择后 读取模板ID, newValue --> itemCat 表中的 id 字段.
+	$scope.$watch('entity.goods.category3Id', function(newValue, oldValue) {
+		itemCatService.findOne(newValue).success(function(response) {
+			$scope.entity.goods.typeTemplateId = response.typeId;
+		});
+	});
+	// 根据模板 id 去找 模板对应的品牌分类, 扩展属性,
+	$scope.$watch('entity.goods.typeTemplateId', function(newValue, oldValue) {
+		typeTemplateService.findOne(newValue).success(
+				function(response) {
+					// 获取类型模板 实体
+					$scope.typeTemplate = response;
+					// 解析品牌列表
+					$scope.typeTemplate.brandIds = JSON
+							.parse($scope.typeTemplate.brandIds);
+					// 在用户更新模板ID时，读取模板中的扩展属性赋给商品的扩展属性。
+					// 解析扩展属性 --> 将字符串格式转换成页面能解析的 json 格式.
+					$scope.entity.goodsDesc.customAttributeItems = JSON
+							.parse($scope.typeTemplate.customAttributeItems);
+//					由于我们的模板中只记录了规格名称,而我们除了显示规格名称还要显示规格下的规格选项
+					
+				});
+	});
 
 });

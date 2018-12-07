@@ -6,10 +6,15 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+
 import com.alibaba.dubbo.config.annotation.Service;
+import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.pinyougou.mapper.TbSpecificationOptionMapper;
 import com.pinyougou.mapper.TbTypeTemplateMapper;
+import com.pinyougou.pojo.TbSpecificationOption;
+import com.pinyougou.pojo.TbSpecificationOptionExample;
 import com.pinyougou.pojo.TbTypeTemplate;
 import com.pinyougou.pojo.TbTypeTemplateExample;
 import com.pinyougou.pojo.TbTypeTemplateExample.Criteria;
@@ -26,6 +31,11 @@ import entity.PageResult;
 @Service
 public class TypeTemplateServiceImpl implements TypeTemplateService {
 
+	/**
+	 * 返回规格列表, 除了显示规格名称还要显示规格下的规格选项
+	 */
+	@Autowired
+	private TbSpecificationOptionMapper specificationOptionMapper;
 	@Autowired
 	private TbTypeTemplateMapper typeTemplateMapper;
 
@@ -117,16 +127,37 @@ public class TypeTemplateServiceImpl implements TypeTemplateService {
 	@Override
 	public List<Map> selectOptionList() {
 		/*
-		 * 朴素的想法 List<Map> result = new ArrayList<>();
-		 * 能从 dao sql解决的, 就别自己创造啊.
-		 * 前台数据: [{35:"手机",37:"电视"},{"$ref":"$[0]"}] ...
-		 * List<TbTypeTemplate> tempLists= typeTemplateMapper.selectByExample(null);
-		 * Map<Long, String> tempMap = new HashMap<Long, String>(); for (TbTypeTemplate
-		 * tbTypeTemplate : tempLists) { tempMap.put(tbTypeTemplate.getId(),
-		 * tbTypeTemplate.getName()); result.add(tempMap); }
+		 * 朴素的想法 List<Map> result = new ArrayList<>(); 能从 dao sql解决的, 就别自己创造啊. 前台数据:
+		 * [{35:"手机",37:"电视"},{"$ref":"$[0]"}] ... List<TbTypeTemplate> tempLists=
+		 * typeTemplateMapper.selectByExample(null); Map<Long, String> tempMap = new
+		 * HashMap<Long, String>(); for (TbTypeTemplate tbTypeTemplate : tempLists) {
+		 * tempMap.put(tbTypeTemplate.getId(), tbTypeTemplate.getName());
+		 * result.add(tempMap); }
 		 */
 		return typeTemplateMapper.selectOptionList();
 
+	}
+
+	@Override
+	public List<Map> findSpecList(Long id) {
+		// 查询模板 //在TypeTemplate 表根据id 查spec_ids
+		TbTypeTemplate typeTemplate = typeTemplateMapper.selectByPrimaryKey(id);
+		// fastJSON 字符串转换成集合.解析`表中表`:[{"id":27,"text":"网络"},{"id":32,"text":"机身内存"}]
+		List<Map> list = null;
+		list = JSON.parseArray(typeTemplate.getSpecIds(), Map.class);
+		for (Map map : list) {
+			// 查询规格选项列表
+			TbSpecificationOptionExample example = new TbSpecificationOptionExample();
+			com.pinyougou.pojo.TbSpecificationOptionExample.Criteria criteria = example.createCriteria();
+			// 本身是 Integer 类型, 强转,再转换成 Long并且specificationOption表中 specId 等于
+			// [{"id":27,"text":"网络"},{"id":32,"text":"机身内存"}] 中的 27.
+			criteria.andSpecIdEqualTo(new Long((Integer) map.get("id")));
+			// 查到规格id 对应的 规格选项集合后, 添加到 每一条数据中
+			List<TbSpecificationOption> options = specificationOptionMapper.selectByExample(example);
+			map.put("options", options);
+		}
+
+		return list;
 	}
 
 }

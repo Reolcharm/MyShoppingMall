@@ -34,9 +34,7 @@ public class UploadController {
 			// 4. 拼接文件访问路径
 			String url = FILE_SERVER_URL + filePath;
 			return new Result(true, url);
-
 		} catch (Exception e) {
-
 			return new Result(true, "上传失败, 请重试");
 		}
 	}

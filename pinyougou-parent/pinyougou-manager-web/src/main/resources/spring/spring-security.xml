@@ -7,8 +7,9 @@
 <!-- 
 	 /* 表示的是该目录下的资源，只包括本级目录不包括下级目录 
 	 /** 表示的是该目录以及该目录下所有级别子目录的资源 
-	 以下页面不被拦截 -->
-	<http pattern="/login.html" security="none"></http>
+	 以下页面不被拦截 --><!-- 测试用 -->
+	<http pattern="/admin/*.html" security="none"></http>
+	<http pattern="/*.html" security="none"></http>
 	<http pattern="/css/**" security="none"></http>
 	<http pattern="/img/**" security="none"></http>
 	<http pattern="/js/**" security="none"></http>

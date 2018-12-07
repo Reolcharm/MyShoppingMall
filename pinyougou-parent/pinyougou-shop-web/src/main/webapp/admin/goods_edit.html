@@ -34,6 +34,7 @@
 <script type="text/javascript" src="../js/service/goodsService.js"></script>
 <script type="text/javascript" src="../js/service/uploadService.js"></script>
 <script type="text/javascript" src="../js/service/itemCatService.js"></script>
+<script type="text/javascript" src="../js/service/typeTemplateService.js"></script>
 <script type="text/javascript" src="../js/controller/baseController.js"></script>
 <script type="text/javascript" src="../js/controller/goodsController.js"></script>
 
@@ -42,7 +43,7 @@
 </head>
 
 <body class="hold-transition skin-red sidebar-mini" ng-app="pinyougou"
-	ng-controller="goodsController">
+	ng-controller="goodsController" ng-init="selectItemCat1List()">
 
 	<!-- 正文区域 -->
 	<section class="content">
@@ -73,11 +74,12 @@
 							<div class="col-md-10 data">
 								<table>
 									<tr>
-										<td><select class="form-control">
+										<td><select class="form-control" ng-model="entity.goods.category1Id" ng-options="item.id as item.name for item in ItemCat1List">
 										</select></td>
-										<td><select class="form-control select-sm"></select></td>
-										<td><select class="form-control select-sm"></select></td>
-										<td>模板ID:19</td>
+										<td><select class="form-control select-sm" ng-model="entity.goods.category2Id" ng-options="item.id as item.name for item in ItemCat2List"></select></td>
+										<td><select class="form-control select-sm"ng-model="entity.goods.category3Id" ng-options="item.id as item.name for item in ItemCat3List"></select></td>
+										<!-- {"id":560,"name":"手机","parentId":559,"typeId":35} -->
+										<td>模板ID:{{entity.goods.typeTemplateId.typeId}}</td>
 									</tr>
 								</table>
 
@@ -92,7 +94,7 @@
 
 							<div class="col-md-2 title">品牌</div>
 							<div class="col-md-10 data">
-								<select class="form-control"></select>
+								<select class="form-control" ng-model="entity.goods.brandId" ng-options="item.id as item.text for item in typeTemplate.brandIds"></select>
 							</div>
 
 							<div class="col-md-2 title">副标题</div>
@@ -176,16 +178,10 @@
 					<!--扩展属性-->
 					<div class="tab-pane" id="customAttribute">
 						<div class="row data-type">
-							<div>
-								<div class="col-md-2 title">扩展属性1</div>
+							<div ng-repeat="pojo in entity.goodsDesc.customAttributeItems">
+								<div class="col-md-2 title">{{pojo.text}}</div>
 								<div class="col-md-10 data">
-									<input class="form-control" placeholder="扩展属性1">
-								</div>
-							</div>
-							<div>
-								<div class="col-md-2 title">扩展属性2</div>
-								<div class="col-md-10 data">
-									<input class="form-control" placeholder="扩展属性2">
+									<input class="form-control" ng-model="pojo.value" placeholder="{{pojo.text}}">
 								</div>
 							</div>
 						</div>
