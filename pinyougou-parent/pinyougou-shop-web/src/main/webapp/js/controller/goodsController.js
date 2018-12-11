@@ -189,17 +189,18 @@ app.controller('goodsController', function($scope, $controller, goodsService,
 
 	// 创建SKU列表
 	$scope.createItemList = function() {
+		// 初始化 entity.itemList
 		$scope.entity.itemList = [ {
 			spec : {},
 			price : 0,
 			num : 99999,
 			status : '0',
 			isDefault : '0'
-		} ];// 初始化
-		var items = $scope.entity.goodsDesc.specificationItems;
-		for (var i = 0; i < items.length; i++) {
+		} ];
+		var specItems = $scope.entity.goodsDesc.specificationItems;
+		for (var i = 0; i < specItems.length; i++) {
 			$scope.entity.itemList = addColumn($scope.entity.itemList,
-					items[i].attributeName, items[i].attributeValue);
+					specItems[i].attributeName, specItems[i].attributeValue);
 		}
 	}
 	// 添加列值

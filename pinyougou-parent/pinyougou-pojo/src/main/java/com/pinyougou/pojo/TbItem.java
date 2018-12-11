@@ -3,23 +3,48 @@ package com.pinyougou.pojo;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.Map;
+
+import org.apache.solr.client.solrj.beans.Field;
+import org.springframework.data.solr.core.mapping.Dynamic;
+
+/**
+ * @author Reolcharm 属性使用@Field注解标识 。 如果属性与配置文件(solrhome的schema.xml
+ *         文件)定义的域名称不一致，需要在注解中指定域名称。
+ */
 
 public class TbItem implements Serializable {
+
+	@Field
 	private Long id;
 
+	@Field("item_title")
 	private String title;
 
-	private String sellPoint;
-
+	@Field("item_price")
 	private BigDecimal price;
+
+	@Field("item_image")
+	private String image;
+
+	@Field("item_goodsid")
+	private Long goodsId;
+
+	@Field("item_category")
+	private String category;
+
+	@Field("item_brand")
+	private String brand;
+
+	@Field("item_seller")
+	private String seller;
+	private String sellPoint;
 
 	private Integer stockCount;
 
 	private Integer num;
 
 	private String barcode;
-
-	private String image;
 
 	private Long categoryid;
 
@@ -37,19 +62,18 @@ public class TbItem implements Serializable {
 
 	private String isDefault;
 
-	private Long goodsId;
-
 	private String sellerId;
 
 	private String cartThumbnail;
 
-	private String category;
-
-	private String brand;
-
 	private String spec;
 
-	private String seller;
+	/**
+	 * 规格动态域
+	 */
+	@Dynamic
+	@Field("item_spec_*")
+	private Map<String, String> specMap;
 
 	public Long getId() {
 		return id;
@@ -233,5 +257,13 @@ public class TbItem implements Serializable {
 
 	public void setSeller(String seller) {
 		this.seller = seller == null ? null : seller.trim();
+	}
+
+	public Map<String, String> getSpecMap() {
+		return specMap;
+	}
+
+	public void setSpecMap(Map<String, String> specMap) {
+		this.specMap = specMap;
 	}
 }
