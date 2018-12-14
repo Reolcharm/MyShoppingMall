@@ -1,0 +1,48 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.pinyougou</groupId>
+		<artifactId>pinyougou-parent</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+	<artifactId>pinyougou-user-service</artifactId>
+	<packaging>war</packaging>
+	<!-- 引入spring dubbox activeMQ相关依赖[搭到此处...]，引入依赖（ pinyougou-user-interface
+	pinyougou-dao pinyougou-common），运行端口为9006 -->
+	<dependencies>
+		<dependency>
+			<groupId>com.pinyougou</groupId>
+			<artifactId>pinyougou-user-interface</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>com.pinyougou</groupId>
+			<artifactId>pinyougou-common</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>com.pinyougou</groupId>
+			<artifactId>pinyougou-dao</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		<!-- JMS -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-jms</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.activemq</groupId>
+			<artifactId>activemq-client</artifactId>
+			<version>5.13.4</version>
+		</dependency>
+	</dependencies>
+</project>

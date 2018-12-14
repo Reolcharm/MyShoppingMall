@@ -283,5 +283,8 @@
 		<module>pinyougou-search-interface</module>
 		<module>pinyougou-search-service</module>
 		<module>pinyougou-search-web</module>
+		<module>pinnyougou-user-web</module>
+		<module>pinyougou-user-interface</module>
+		<module>pinyougou-user-service</module>
 	</modules>
 </project>
