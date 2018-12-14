@@ -1,10 +1,7 @@
-//登陆服务层
-app.controller('indexController', function($http, $scope, loginService,
-		$controller) {
-	// 读取当前登录人
-	$scope.showLoginName = function() {
-		loginService.loginName().success(function(response) {
-			// 定义变量loginName. 页面展示.
+//首页控制器
+app.controller('indexController', function($scope, loginService) {
+	$scope.showName = function() {
+		loginService.showName().success(function(response) {
 			$scope.loginName = response.loginName;
 		});
 	}

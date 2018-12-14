@@ -24,5 +24,8 @@
 			</bean>
 		</mvc:message-converters>
 	</mvc:annotation-driven>
-
+	<!-- 引用dubbo 服务 -->
+	<dubbo:application name="pinyougou-user-web" />
+	<dubbo:registry address="zookeeper://192.168.25.129:2181"/>
+	<dubbo:annotation package="com.pinyougou.user.controller" />  	
 </beans>
