@@ -36,6 +36,9 @@ public class TbItem implements Serializable {
 	@Field("item_brand")
 	private String brand;
 
+	/**
+	 * seller 表中  nick_name 字段
+	 */
 	@Field("item_seller")
 	private String seller;
 	private String sellPoint;
